@@ -1,24 +1,82 @@
-# Habit Tracker Implementation
-  
-This is a project built with [Chef](https://chef.convex.dev) using [Convex](https://convex.dev) as its backend.
-  
-This project is connected to the Convex deployment named [`zealous-fox-764`](https://dashboard.convex.dev/d/zealous-fox-764).
-  
-## Project structure
-  
-The frontend code is in the `app` directory and is built with [Vite](https://vitejs.dev/).
-  
-The backend code is in the `convex` directory.
-  
-`npm run dev` will start the frontend and backend servers.
+# Habit Tracker 
 
-## App authentication
+A sleek and minimal habit tracking web application built entirely using **TypeScript**, with both frontend and backend implemented using **Vite**. The app supports user authentication, habit tracking, and is fully deployed on **Vercel** for a seamless experience.
 
-Chef apps use [Convex Auth](https://auth.convex.dev/) with Anonymous auth for easy sign in. You may wish to change this before deploying your app.
+## Features
+- User authentication (login & signup)
+- Add, remove, and update daily habits
+- Track habit streaks and completions
+- Persistent storage using a backend database
+- Type-safe codebase using TypeScript on both client and server
 
-## Developing and deploying your app
+## Tech Stack
+- **Frontend**: TypeScript, Vite, HTML, CSS
+- **Backend**: TypeScript, Vite (API Routes or Server Entry)
+- **Authentication**: JWT-based auth
+- **Deployment**: [Vercel](https://vercel.com)
 
-Check out the [Convex docs](https://docs.convex.dev/) for more information on how to develop with Convex.
-* If you're new to Convex, the [Overview](https://docs.convex.dev/understanding/) is a good place to start
-* Check out the [Hosting and Deployment](https://docs.convex.dev/production/) docs for how to deploy your app
-* Read the [Best Practices](https://docs.convex.dev/understanding/best-practices/) guide for tips on how to improve you app further
+## Live Demo
+🔗 [View Live on Vercel](https://your-vercel-app-url.vercel.app)
+
+## Getting Started
+### 1. Clone the Repository
+```sh
+git clone https://github.com/your-username/habit-tracker.git
+cd habit-tracker
+```
+
+### 2. Install Dependencies
+```sh
+npm install
+```
+
+### 3. Set Environment Variables
+Create a `.env` file and add your environment variables:
+```env
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+```
+
+### 4. Run Locally
+```sh
+npm run dev
+```
+Then visit `http://localhost:3000` in your browser.
+
+## Folder Structure
+```
+habit-tracker/
+├── public/
+├── src/
+│   ├── components/
+│   ├── pages/
+│   ├── api/               # Vite backend routes
+│   ├── styles/
+│   └── main.ts
+├── index.html
+├── tsconfig.json
+├── vite.config.ts
+├── package.json
+└── README.md
+```
+
+## Customization
+- Customize UI styles in the `src/styles/` folder.
+- Extend or modify routes under `src/api/`.
+- Connect to any database by updating connection logic.
+
+## Deployment
+This app is deployed via Vercel with both frontend and backend handled through the same Vite project. Be sure to set your environment variables in the Vercel dashboard.
+
+## License
+Licensed under the MIT License.
+
+## Contributing
+Pull requests are welcome! Feel free to fork the repo and submit improvements.
+
+---
+
+Track your habits. Build consistency. Stay accountable.
+
+✨ Made with Vite, TypeScript, and ❤️
+
