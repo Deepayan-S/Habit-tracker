@@ -128,6 +128,7 @@ function Content() {
   const updateHabit = useMutation(api.habits.update);
   const toggleCompletion = useMutation(api.habits.toggleCompletion);
   const toggleEditMode = useMutation(api.habits.toggleEditMode);
+  const deleteHabit = useMutation(api.habits.deleteHabit);
   
   const [showNewHabitForm, setShowNewHabitForm] = useState(false);
   const [newHabitName, setNewHabitName] = useState("");
@@ -135,6 +136,7 @@ function Content() {
   const [targetDays, setTargetDays] = useState(1);
   const [selectedColor, setSelectedColor] = useState(DEFAULT_COLORS[0]);
   const [editingHabit, setEditingHabit] = useState<Id<"habits"> | null>(null);
+  const [habitToDelete, setHabitToDelete] = useState<Id<"habits"> | null>(null);
 
   const today = new Date().toISOString().split('T')[0];
   const last90Days = [...Array(90)].map((_, i) => {
@@ -189,6 +191,16 @@ function Content() {
       toast.success("Habit updated!");
     } catch (error) {
       toast.error("Failed to update habit");
+    }
+  };
+
+  const handleDeleteHabit = async (habitId: Id<"habits">) => {
+    try {
+      await deleteHabit({ habitId });
+      setHabitToDelete(null);
+      toast.success("Habit deleted!");
+    } catch (error) {
+      toast.error("Failed to delete habit");
     }
   };
 
@@ -362,20 +374,21 @@ function Content() {
                         </p>
                       </div>
                       <div className="flex gap-2">
-                        {completionsByDate[`${habit._id}-${today}`] ? (
-                          <button
-                            onClick={() => handleToggle(habit._id, today)}
-                            className="px-3 py-1 rounded bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
-                          >
-                            Undo Today
-                          </button>
-                        ) : (
+                        {!completionsByDate[`${habit._id}-${today}`] && (
                           <button
                             onClick={() => handleToggle(habit._id, today)}
                             className="px-3 py-1 rounded text-white"
                             style={{ backgroundColor: habit.color }}
                           >
                             Done Today
+                          </button>
+                        )}
+                        {completionsByDate[`${habit._id}-${today}`] && (
+                          <button
+                            onClick={() => handleToggle(habit._id, today)}
+                            className="px-3 py-1 rounded bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
+                          >
+                            Undo Today
                           </button>
                         )}
                         <button
@@ -393,6 +406,12 @@ function Content() {
                           }`}
                         >
                           {habit.editMode ? "Editing" : "View"}
+                        </button>
+                        <button
+                          onClick={() => setHabitToDelete(habit._id)}
+                          className="px-3 py-1 rounded bg-red-100 dark:bg-red-900 hover:bg-red-200 dark:hover:bg-red-800 text-red-800 dark:text-red-200"
+                        >
+                          Delete
                         </button>
                       </div>
                     </div>
@@ -423,6 +442,32 @@ function Content() {
           </div>
         </div>
       </Authenticated>
+
+      {/* Delete Confirmation Modal */}
+      {habitToDelete && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+          <div className="bg-white dark:bg-gray-800 rounded-lg p-6 max-w-sm w-full">
+            <h3 className="text-lg font-semibold mb-4">Delete Habit</h3>
+            <p className="text-gray-600 dark:text-gray-300 mb-6">
+              Are you sure you want to delete this habit? This action cannot be undone.
+            </p>
+            <div className="flex gap-4">
+              <button
+                onClick={() => handleDeleteHabit(habitToDelete)}
+                className="flex-1 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+              >
+                Delete
+              </button>
+              <button
+                onClick={() => setHabitToDelete(null)}
+                className="flex-1 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
